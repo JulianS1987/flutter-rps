@@ -10,7 +10,7 @@ class PlayerId {
 }
 
 // class that represents a player
-class Player {
+abstract class Player {
   late final String _name;
   final bool _isHuman;
   int _winCounter = 0;
