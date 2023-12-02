@@ -4,7 +4,7 @@ import 'package:rock_paper_scissors/types/enums.dart';
 // class definiton for single round
 class Round {
   List<PlayerId> winner = [];
-  List<PlayerId> loser = [];
+  List<PlayerId> looser = [];
   List<PlayerId> draw = [];
   Map<PlayerId, Choice> choices = {};
 }
@@ -268,10 +268,10 @@ class MatchMaker {
     if (winnerChoice != null) {
       // determine winners of _currentRound
       List<PlayerId> winners = _findWinners([winnerChoice], round.choices);
-      // determine losers of _currentRound
-      List<PlayerId> losers = _findLosers(winners, round.choices);
-      // add losers to loser list in _currentRound
-      round.loser.addAll(losers);
+      // determine loosers of _currentRound
+      List<PlayerId> loosers = _findLoosers(winners, round.choices);
+      // add loosers to looser list in _currentRound
+      round.looser.addAll(loosers);
       // if there is only one winner, add winner to winner list in _currentRound and return player id of winner
       if (winners.length == 1) {
         PlayerId winner = winners.first;
@@ -303,18 +303,18 @@ class MatchMaker {
     return winners;
   }
 
-  // determine losers of _currentRound (all players that are not winners)
-  List<PlayerId> _findLosers(
+  // determine loosers of _currentRound (all players that are not winners)
+  List<PlayerId> _findLoosers(
       List<PlayerId> winnerIds, Map<PlayerId, Choice> choices) {
-    List<PlayerId> losers = [];
+    List<PlayerId> loosers = [];
     // iterate over choices map
     for (var entry in choices.entries) {
-      // if winnerIds does not contain player id of entry, add player id of entry to losers list
+      // if winnerIds does not contain player id of entry, add player id of entry to loosers list
       if (!winnerIds.contains(entry.key)) {
-        losers.add(entry.key);
+        loosers.add(entry.key);
       }
     }
-    return losers;
+    return loosers;
   }
 
   void _buildGameOutcomeStringAndNotifyParent(List<Player> players) {
@@ -335,17 +335,18 @@ class MatchMaker {
         players.firstWhere((player) => player.id == winner).name;
     // get winner choice
     Choice winnerChoice = choices[winner]!;
-    // get loser ids
-    List<PlayerId> loserIds = choices.keys.where((id) => id != winner).toList();
-    // get loser names and choices as Map
-    Map<String, Choice> loserNamesChoiceMap =
-        _createLoserNameChoiceMap(loserIds, players, choices);
+    // get looser ids
+    List<PlayerId> looserIds =
+        choices.keys.where((id) => id != winner).toList();
+    // get looser names and choices as Map
+    Map<String, Choice> looserNamesChoiceMap =
+        _createLooserNameChoiceMap(looserIds, players, choices);
     // build game outcome string in the following format:
-    // '{winnerName} beats {loserName1} ({loser1Choice}), {loserName2} ({loser2Choice}), ... with {winnerChoice}'
+    // '{winnerName} beats {looserName1} ({looser1Choice}), {looserName2} ({looser2Choice}), ... with {winnerChoice}'
     String gameOutcomeText = '$winnerName beats ';
-    // iterate over loserNamesChoiceMap
-    for (var entry in loserNamesChoiceMap.entries) {
-      // add loser name and choice to game outcome string
+    // iterate over looserNamesChoiceMap
+    for (var entry in looserNamesChoiceMap.entries) {
+      // add looser name and choice to game outcome string
       gameOutcomeText +=
           '${entry.key} (${entry.value.toString().split('.').last}), ';
     }
@@ -355,18 +356,18 @@ class MatchMaker {
     _notifyGameOutcomeTextChanged(gameOutcomeText);
   }
 
-  // create map of loser names and choices
-  Map<String, Choice> _createLoserNameChoiceMap(List<PlayerId> loserIds,
+  // create map of looser names and choices
+  Map<String, Choice> _createLooserNameChoiceMap(List<PlayerId> looserIds,
       List<Player> players, Map<PlayerId, Choice> choices) {
-    // create map to store loser names and choices
-    Map<String, Choice> loserNamesAndChoices = {};
-    // iterate over loser ids and add loser name and choice to loserNamesAndChoices map
-    for (PlayerId id in loserIds) {
+    // create map to store looser names and choices
+    Map<String, Choice> looserNamesAndChoices = {};
+    // iterate over looser ids and add looser name and choice to looserNamesAndChoices map
+    for (PlayerId id in looserIds) {
       String name = players.firstWhere((player) => player.id == id).name;
       Choice choice = choices[id]!;
-      loserNamesAndChoices[name] = choice;
+      looserNamesAndChoices[name] = choice;
     }
-    return loserNamesAndChoices;
+    return looserNamesAndChoices;
   }
 
   // function to notify parent about the gameOutcomeText Text changed
