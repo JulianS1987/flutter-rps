@@ -36,9 +36,8 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  // maybe change the type of numberOfRounds to double, to use double.infinity
-                                  const PlayScreen(numberOfRounds: 9999)));
+                              builder: (context) => const PlayScreen(
+                                  numberOfRounds: double.infinity)));
                     },
                     child: const Text('Endless'))),
           ],

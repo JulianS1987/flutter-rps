@@ -8,7 +8,7 @@ import 'package:rock_paper_scissors/types/enums.dart';
 // PlayScreen is the screen where the game is played. It displays the current
 // round, the current player, the scoreboard and the buttons to choose.
 class PlayScreen extends StatefulWidget {
-  final int numberOfRounds;
+  final double numberOfRounds;
 
   const PlayScreen({Key? key, required this.numberOfRounds}) : super(key: key);
 

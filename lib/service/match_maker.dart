@@ -14,7 +14,7 @@ class MatchMaker {
   final List<Player> _players = [];
 
   // maximum number of rounds, will be set with constructor parameter
-  final int _maxRounds;
+  final double _maxRounds;
 
   // list of rounds
   final List<Round> _rounds = [];
@@ -26,7 +26,7 @@ class MatchMaker {
   // _currentRound is the current round, will be set to a new round when game starts or _currentRound is complete
   late Round _currentRound;
   // required number of wins to win the game, will be calculated in the constructor
-  late int _requiredWins;
+  late double _requiredWins;
 
   // pubblic getter
   int get playerCount => _players.length;
@@ -60,7 +60,10 @@ class MatchMaker {
       onCurrentPlayerChanged(_currentPlayer);
     }
     // calculate required wins to win the game
-    _requiredWins = (_maxRounds / 2).ceil();
+    // if _maxRounds is infinity, set _requiredWins to infinity
+    // else set _requiredWins to (_maxRounds ~/ 2) + 1
+    _requiredWins =
+        _maxRounds != double.infinity ? (_maxRounds ~/ 2) + 1 : double.infinity;
     // start first round
     _startNewRound();
   }
